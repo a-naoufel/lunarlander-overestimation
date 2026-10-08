@@ -12,6 +12,33 @@ bias affect performance?
 *Evaluation return (top) and overestimation bias Q₁ − G (bottom), without (left) and with (right)
 LayerNorm in the critics; mean over 10 seeds, shaded: 95% bootstrap CI.*
 
+## Simulations
+
+The six agents of seed 0 after 300k steps, flying the same episodes: DDPG, TD3 and TD3 with
+β = 0.75 (columns), without (top) and with (bottom) LayerNorm in the critics. Below each lander,
+the critic's estimate Q₁(s_t, a_t) during the episode (orange) and, once the episode is over,
+the true discounted return G_t (blue): the gap between the two curves is the overestimation
+that the study measures.
+
+![Six trained agents landing](media/landings_6_agents.gif)
+
+An agent that never fires its engines (action always [0, 0]) next to TD3 with LayerNorm:
+
+![Do nothing vs TD3](media/do_nothing_vs_td3.gif)
+
+Full videos with three landings each: [`media/landings_6_agents.mp4`](media/landings_6_agents.mp4),
+[`media/do_nothing_vs_td3.mp4`](media/do_nothing_vs_td3.mp4). These are single runs, shown for
+illustration; the conclusions of the study rest on 10 seeds per condition.
+
+To watch the agents live (keys: space = pause, n = next episode, q = quit):
+
+```bash
+python watch.py agents/ddpg_ln00*.pt agents/td3_ln00*_s0.pt agents/td3_ln00*b0.75*.pt \
+                agents/ddpg_ln10*.pt agents/td3_ln10*_s0.pt agents/td3_ln10*b0.75*.pt --cols 3
+python watch.py noop agents/td3_ln10_L2_utd1_pd2_s0.pt         # do-nothing baseline
+python qgrid.py agents/*.pt                                     # Q-value heatmaps of the critics
+```
+
 ## Method in short
 
 - **Algorithms** (`td3.py`): one PyTorch file, so that DDPG and TD3 differ only by TD3's three
@@ -45,6 +72,8 @@ exploration noise N(0, 0.1²), TD3 smoothing noise 0.2 clipped at 0.5, one gradi
 | `td3_notebook.ipynb` | the TD3 part of `td3.py` as a commented notebook |
 | `watch.py` | live simulation of saved agents, with the critic's estimate vs the true return |
 | `qgrid.py` | heatmaps of the critics' Q-values over actions and positions |
+| `agents/` | the six seed-0 agents (actor and critics) after 300k steps |
+| `media/` | recorded simulations (GIF for this page, MP4 with three landings) |
 | `runs/core`, `runs/beta075` | JSON logs of the 60 main runs (config + every evaluation) |
 | `report/figs` | generated figures, results table and statistics |
 
@@ -62,7 +91,7 @@ ALGOS=td3 ./launch.sh runs/beta075 20 --beta 0.75                      # TD3 wit
 ./run_jobs.sh jobs_extra.txt 20                                        # dose-response and ablation runs
 python analyze.py runs/core runs/beta075 --out report/figs             # figures and statistics
 python analyze_extra.py                                                # additional analyses
-python td3.py --algo td3 --seed 0 --save-ckpt 1 --out runs/showcase    # save agents, then:
+python td3.py --algo td3 --seed 0 --save-ckpt 1 --out runs/showcase    # save new agents, then:
 python watch.py runs/showcase/*.pt                                     # watch them land
 ```
 

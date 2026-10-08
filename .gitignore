@@ -4,6 +4,7 @@ __pycache__/
 
 # large or machine-specific outputs
 *.pt
+!agents/*.pt
 outputs/
 runs/showcase/
 runs/logs/
