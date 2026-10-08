@@ -33,8 +33,9 @@ illustration; the conclusions of the study rest on 10 seeds per condition.
 To watch the agents live (keys: space = pause, n = next episode, q = quit):
 
 ```bash
-python watch.py agents/ddpg_ln00*.pt agents/td3_ln00*_s0.pt agents/td3_ln00*b0.75*.pt \
-                agents/ddpg_ln10*.pt agents/td3_ln10*_s0.pt agents/td3_ln10*b0.75*.pt --cols 3
+python watch.py agents/ddpg_ln00_L2_utd1_pd1_s0.pt agents/td3_ln00_L2_utd1_pd2_s0.pt \
+                agents/td3_ln00_L2_utd1_pd2_b0.75_s0.pt agents/ddpg_ln10_L2_utd1_pd1_s0.pt \
+                agents/td3_ln10_L2_utd1_pd2_s0.pt agents/td3_ln10_L2_utd1_pd2_b0.75_s0.pt --cols 3
 python watch.py noop agents/td3_ln10_L2_utd1_pd2_s0.pt         # do-nothing baseline
 python qgrid.py agents/*.pt                                     # Q-value heatmaps of the critics
 ```
