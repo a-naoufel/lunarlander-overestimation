@@ -1,0 +1,21 @@
+\begin{tabular}{@{}llcccc@{}}
+\toprule
+Algorithm & LN & $n$ & Final return & Success (\%) & Bias \\
+\midrule
+DDPG & off & 10 & $-22$ {\scriptsize[$-71$, $25$]} & $14$ {\scriptsize[$5$, $24$]} & $169$ {\scriptsize[$137$, $204$]} \\
+DDPG & on & 10 & $-90$ {\scriptsize[$-118$, $-58$]} & $4$ {\scriptsize[$1$, $8$]} & $529$ {\scriptsize[$450$, $611$]} \\
+TD3 & off & 10 & $135$ {\scriptsize[$69$, $198$]} & $49$ {\scriptsize[$26$, $72$]} & $-11$ {\scriptsize[$-14$, $-8$]} \\
+TD3 & on & 10 & $195$ {\scriptsize[$140$, $239$]} & $75$ {\scriptsize[$56$, $90$]} & $-8$ {\scriptsize[$-10$, $-6$]} \\
+TD3, $\beta = 0.75$ & off & 10 & $169$ {\scriptsize[$109$, $219$]} & $67$ {\scriptsize[$47$, $85$]} & $15$ {\scriptsize[$9$, $21$]} \\
+TD3, $\beta = 0.75$ & on & 10 & $212$ {\scriptsize[$149$, $256$]} & $79$ {\scriptsize[$59$, $93$]} & $14$ {\scriptsize[$9$, $18$]} \\
+\midrule
+\multicolumn{3}{@{}l}{TD3 $-$ DDPG, LN off} & $158$ {\scriptsize[$77$, $239$]}, $p=0.0022$$^\dagger$ & $35$ {\scriptsize[$10$, $60$]}, $p=0.024$ & $-180$ {\scriptsize[$-215$, $-148$]}, $p<0.001$$^\dagger$ \\
+\multicolumn{3}{@{}l}{TD3 $-$ DDPG, LN on} & $286$ {\scriptsize[$223$, $340$]}, $p<0.001$$^\dagger$ & $72$ {\scriptsize[$52$, $87$]}, $p<0.001$$^\dagger$ & $-537$ {\scriptsize[$-618$, $-457$]}, $p<0.001$$^\dagger$ \\
+\multicolumn{3}{@{}l}{LN $\times$ algorithm} & $128$ {\scriptsize[$28$, $225$]}, $p=0.024$ & $37$ {\scriptsize[$5$, $66$]}, $p=0.039$ & $-357$ {\scriptsize[$-445$, $-270$]}, $p<0.001$$^\dagger$ \\
+\multicolumn{3}{@{}l}{LN effect, DDPG} & $-68$ {\scriptsize[$-124$, $-11$]}, $p=0.042$ & $-10$ {\scriptsize[$-21$, $-1$]}, $p=0.078$ & $361$ {\scriptsize[$274$, $449$]}, $p<0.001$$^\dagger$ \\
+\multicolumn{3}{@{}l}{LN effect, TD3} & $60$ {\scriptsize[$-24$, $140$]}, $p=0.19$ & $26$ {\scriptsize[$-4$, $54$]}, $p=0.11$ & $3$ {\scriptsize[$-1$, $7$]}, $p=0.13$ \\
+\multicolumn{3}{@{}l}{LN effect, TD3, $\beta = 0.75$} & $43$ {\scriptsize[$-35$, $119$]}, $p=0.32$ & $12$ {\scriptsize[$-14$, $38$]}, $p=0.41$ & $-1$ {\scriptsize[$-8$, $6$]}, $p=0.83$ \\
+\multicolumn{3}{@{}l}{$\beta$ effect, LN off} & $33$ {\scriptsize[$-54$, $117$]}, $p=0.48$ & $18$ {\scriptsize[$-13$, $48$]}, $p=0.29$ & $26$ {\scriptsize[$20$, $32$]}, $p<0.001$$^\dagger$ \\
+\multicolumn{3}{@{}l}{$\beta$ effect, LN on} & $16$ {\scriptsize[$-60$, $90$]}, $p=0.69$ & $3$ {\scriptsize[$-22$, $29$]}, $p=0.81$ & $22$ {\scriptsize[$17$, $27$]}, $p<0.001$$^\dagger$ \\
+\bottomrule
+\end{tabular}

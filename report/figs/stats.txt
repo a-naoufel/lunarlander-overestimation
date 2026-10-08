@@ -1,0 +1,33 @@
+DDPG           LN=0 n=10  final  -22.1 [ -70.7,   25.0]  success   14.0 [   5.3,   23.7]  bias  168.6 [ 137.3,  203.8]
+DDPG           LN=1 n=10  final  -90.5 [-118.0,  -57.6]  success    3.7 [   1.0,    7.7]  bias  529.2 [ 449.7,  610.8]
+TD3            LN=0 n=10  final  135.4 [  69.1,  198.4]  success   49.0 [  25.7,   72.0]  bias  -11.2 [ -14.0,   -8.4]
+TD3            LN=1 n=10  final  195.2 [ 140.0,  239.1]  success   75.3 [  55.7,   90.3]  bias   -8.0 [ -10.5,   -5.6]
+TD3, β = 0.75  LN=0 n=10  final  168.6 [ 108.9,  218.7]  success   66.7 [  46.7,   84.7]  bias   14.8 [   9.3,   20.5]
+TD3, β = 0.75  LN=1 n=10  final  211.7 [ 149.2,  255.8]  success   78.7 [  58.7,   93.3]  bias   14.0 [   9.3,   17.9]
+TD3 - DDPG, LN off               final  :  +157.5 [   76.6,   238.5]  p=0.0022  Holm p=0.0352
+TD3 - DDPG, LN off               success:   +35.0 [   10.0,    59.7]  p=0.0237  Holm p=0.355
+TD3 - DDPG, LN off               bias   :  -179.8 [ -214.9,  -147.9]  p=3.23e-06  Holm p=6.45e-05
+TD3 - DDPG, LN on                final  :  +285.7 [  222.7,   339.7]  p=2.23e-07  Holm p=5.35e-06
+TD3 - DDPG, LN on                success:   +71.7 [   51.7,    87.0]  p=2.95e-05  Holm p=0.000502
+TD3 - DDPG, LN on                bias   :  -537.2 [ -618.2,  -457.0]  p=5.8e-07  Holm p=1.33e-05
+interaction LN x algorithm       final  :  +128.2 [   27.8,   225.2]  p=0.0241  Holm p=0.355
+interaction LN x algorithm       success:   +36.7 [    5.0,    66.3]  p=0.0392  Holm p=0.51
+interaction LN x algorithm       bias   :  -357.5 [ -444.9,  -270.5]  p=6.14e-06  Holm p=0.000111
+LN effect, DDPG                  final  :   -68.4 [ -124.0,   -11.4]  p=0.0421  Holm p=0.51
+LN effect, DDPG                  success:   -10.3 [  -20.7,    -1.0]  p=0.0776  Holm p=0.854
+LN effect, DDPG                  bias   :  +360.6 [  273.8,   449.0]  p=5.69e-06  Holm p=0.000108
+LN effect, TD3                   final  :   +59.8 [  -23.9,   140.2]  p=0.195  Holm p=1
+LN effect, TD3                   success:   +26.3 [   -3.7,    54.3]  p=0.113  Holm p=1
+LN effect, TD3                   bias   :    +3.2 [   -0.6,     6.8]  p=0.131  Holm p=1
+LN effect, TD3, β = 0.75         final  :   +43.1 [  -34.5,   118.7]  p=0.316  Holm p=1
+LN effect, TD3, β = 0.75         success:   +12.0 [  -13.7,    38.0]  p=0.407  Holm p=1
+LN effect, TD3, β = 0.75         bias   :    -0.8 [   -8.3,     6.1]  p=0.827  Holm p=1
+beta effect (0.75 - 1), LN off   final  :   +33.2 [  -54.1,   117.1]  p=0.478  Holm p=1
+beta effect (0.75 - 1), LN off   success:   +17.7 [  -13.3,    47.7]  p=0.291  Holm p=1
+beta effect (0.75 - 1), LN off   bias   :   +26.0 [   19.9,    32.3]  p=3.03e-06  Holm p=6.36e-05
+beta effect (0.75 - 1), LN on    final  :   +16.4 [  -59.6,    90.2]  p=0.688  Holm p=1
+beta effect (0.75 - 1), LN on    success:    +3.3 [  -21.7,    29.0]  p=0.809  Holm p=1
+beta effect (0.75 - 1), LN on    bias   :   +22.0 [   16.7,    26.7]  p=8.29e-07  Holm p=1.82e-05
+tests in the table: 24 (dagger = significant after Holm correction)
+pooled over all finished runs: Spearman rho=-0.640 p=3.6e-08 n=60
+finished runs: 60, still running: 0

@@ -1,0 +1,21 @@
+# environments and caches
+.venv/
+__pycache__/
+
+# large or machine-specific outputs
+*.pt
+outputs/
+runs/showcase/
+runs/logs/
+runs/logs_extra/
+watch_*.log
+jobs_ppti-*.txt
+curves_core.png
+
+# the report draft stays private until the deadline; only its generated figures are shared
+report/*
+!report/figs/
+report/figs/old_*
+
+# course practical (not part of this project)
+04_ddpg_td3.ipynb

@@ -1,0 +1,8 @@
+A. Early bias (50k−150k) vs later improvement (final − return at 140k−160k); Spearman on within−condition ranks, permutation p
+   all conditions (n = 60): rho = −0.04, p = 0.771
+   DDPG           (n = 20): rho = −0.14, p = 0.568
+   TD3            (n = 20): rho = +0.13, p = 0.603
+   TD3, β = 0.75  (n = 20): rho = −0.11, p = 0.655
+B. Bias vs final return within conditions (z−scores, n = 60): r = −0.37, p = 0.005
+C. dose−response: runs not available yet
+D. ablation: runs not available yet
