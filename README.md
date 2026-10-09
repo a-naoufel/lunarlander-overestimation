@@ -161,6 +161,8 @@ The runs of the report used Python 3.12, PyTorch 2.14.1 (CPU), Gymnasium 1.4.0 a
 
 ## References
 
+Full list of the works cited in the report: [`REFERENCES.md`](REFERENCES.md).
+
 - Fujimoto, van Hoof, Meger (2018). Addressing Function Approximation Error in Actor-Critic Methods. ICML.
 - Lillicrap et al. (2016). Continuous control with deep reinforcement learning. ICLR.
 - Ba, Kiros, Hinton (2016). Layer Normalization. arXiv:1607.06450.
