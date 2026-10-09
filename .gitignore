@@ -11,6 +11,7 @@ runs/logs/
 runs/logs_extra/
 watch_*.log
 jobs_ppti-*.txt
+jobs_*_ppti-*.txt
 curves_core.png
 
 # the report draft stays private until the deadline; only its generated figures are shared
@@ -28,6 +29,5 @@ mp-sb3/results.zip
 mp-sb3/run_all.log
 mp-sb3/results_smoke/
 mp-sb3/figures_smoke/
-mp-sb3/results_300k/
 mp-sb3/**/eval_raw/
 mp-sb3/**/events.out.tfevents.*

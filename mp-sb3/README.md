@@ -11,6 +11,8 @@ uv pip install -e .
 python -m mp_sb3.run_all --smoke                   # tiny runs to check the setup
 python -m mp_sb3.run_all core bias --workers 20    # 4 + 4 configurations x seeds 0-4
 python -m mp_sb3.analysis                          # figures/ and figures/stats_*.csv
+# the same grid with the 300k-step budget of the main runs (results_300k/):
+python -m mp_sb3.experiment core --grid algo=ddpg,td3 critic_ln=0,1 --set total_steps=300000 --seeds 0-4 --workers 20 --root results_300k
 ```
 
 Settings are in `src/mp_sb3/config.py`: 150k steps, γ = 0.98, learning rate 1e-3, τ = 0.01,

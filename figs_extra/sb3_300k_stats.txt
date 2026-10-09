@@ -1,0 +1,20 @@
+SB3 replication (mp-sb3/results_300k/core, 300k steps)
+  DDPG LN off n=5  final return   70.3  success (%)   41.6  bias   74.8
+  DDPG LN on  n=5  final return  -21.2  success (%)   17.6  bias  154.7
+  TD3  LN off n=5  final return  145.2  success (%)   61.6  bias   -2.4
+  TD3  LN on  n=5  final return  207.7  success (%)   78.8  bias   -1.5
+  TD3 - DDPG, LN off   final return:   +74.9  p=0.0207  Holm p=0.166
+  TD3 - DDPG, LN off   success (%) :   +20.0  p=0.00192  Holm p=0.025  †
+  TD3 - DDPG, LN off   bias        :   -77.2  p=0.000102  Holm p=0.00152  †
+  TD3 - DDPG, LN on    final return:  +228.8  p=0.00339  Holm p=0.0407  †
+  TD3 - DDPG, LN on    success (%) :   +61.2  p=0.000632  Holm p=0.00884  †
+  TD3 - DDPG, LN on    bias        :  -156.2  p=0.00536  Holm p=0.0536
+  LN x algorithm       final return:  +153.9  p=0.0164  Holm p=0.147
+  LN x algorithm       success (%) :   +41.2  p=0.00481  Holm p=0.0529
+  LN x algorithm       bias        :   -79.0  p=0.0485  Holm p=0.244
+  LN effect, DDPG      final return:   -91.5  p=0.0952  Holm p=0.244
+  LN effect, DDPG      success (%) :   -24.0  p=0.048  Holm p=0.244
+  LN effect, DDPG      bias        :   +80.0  p=0.047  Holm p=0.244
+  LN effect, TD3       final return:   +62.5  p=0.0398  Holm p=0.244
+  LN effect, TD3       success (%) :   +17.2  p=0.0348  Holm p=0.244
+  LN effect, TD3       bias        :    +0.9  p=0.672  Holm p=0.672

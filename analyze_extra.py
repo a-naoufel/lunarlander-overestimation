@@ -249,7 +249,7 @@ def dagger(ax, x, top, color):
 
 def plot_controlled(summ, sig, out):
     """Report figure: (a) dose-response on beta, (b) ablation; one column per metric, y shared per column."""
-    fig, axes = plt.subplots(2, 3, figsize=(PAGE_W, 4.4), sharey="col", squeeze=False)
+    fig, axes = plt.subplots(2, 3, figsize=(PAGE_W, 3.5), sharey="col", squeeze=False)
     names = (DDPG, *ABLATIONS, TD3)
     for j, (k, metric, scale) in enumerate(METRICS):
         ax = axes[0, j]
@@ -296,6 +296,105 @@ def plot_controlled(summ, sig, out):
     plt.close(fig)
 
 
+SHORT_STEPS = 100_000  # length of the depth and UTD runs (E and F)
+FACTORS = {"depth": ("n_layers", (1, 2, 3, 4, 5), 2, "Number of hidden layers"),
+           "utd": ("utd", (1, 2, 3, 4, 5), 1, "Gradient steps per environment step (UTD)")}
+
+
+def summarize_at(run, total=SHORT_STEPS):
+    """(final return, bias, success) using only the evaluations up to `total` steps (None if not reached)."""
+    ev = [e for e in run["evals"] if e["step"] <= total]
+    if not ev or ev[-1]["step"] != total:
+        return None
+    last = ev[-3:]
+    return (np.mean([e["return_mean"] for e in last]),
+            np.mean([e["bias"] for e in ev if e["step"] >= total / 2]),
+            np.mean([r >= 200 for e in last for r in e["returns"]]))
+
+
+def load_factor(name):
+    """{(value, ln): [(final, bias, success), ...]} for TD3, seeds 0-4; the default value comes from runs/core."""
+    key, values, default, _ = FACTORS[name]
+    other = "utd" if key == "n_layers" else "n_layers"
+    other_default = FACTORS["utd" if name == "depth" else "depth"][2]
+    summ = defaultdict(list)
+    for d in ("runs/core", f"runs/{name}"):
+        for f in sorted(glob.glob(f"{d}/td3_*.json")):
+            run = json.load(open(f))
+            c = run["config"]
+            if c["seed"] > 4 or c.get("beta", 1.0) != 1 or c[other] != other_default or c[key] not in values:
+                continue
+            if d == "runs/core" and c[key] != default:
+                continue
+            s = summarize_at(run)
+            if s is not None:
+                summ[(name, c[key], c["critic_ln"])].append(s)
+    return summ
+
+
+def analysis_factor(name, out_dir, text):
+    key, values, default, xlabel = FACTORS[name]
+    summ = load_factor(name)
+    if not all(len(summ.get((name, v, ln), [])) >= 2 for v in values for ln in (0, 1)):
+        text.append(f"{'E' if name == 'depth' else 'F'}. {name}: runs not available yet")
+        return None, None
+    text.append(f"{'E' if name == 'depth' else 'F'}. {name} (TD3, {SHORT_STEPS // 1000}k steps, seeds 0-4): "
+                f"Spearman between {key} and each per-run metric (n = 25 per LN setting)")
+    for ln in (0, 1):
+        for k, metric, scale in METRICS:
+            x = [v for v in values for _ in summ[(name, v, ln)]]
+            y = [s[k] for v in values for s in summ[(name, v, ln)]]
+            rho, p = stats.spearmanr(x, y)
+            text.append(f"   LN {'on ' if ln else 'off'} {metric:13s}: rho = {rho:+.2f}, p = {p:.3g}")
+    short = {"depth": "layers", "utd": "UTD"}[name]
+    comps = [(f"{short} {v} $-$ {short} {default}, LN {'on' if ln else 'off'}", (name, v, ln), (name, default, ln))
+             for ln in (0, 1) for v in values if v != default]
+    lines, adj = family(summ, comps, text, f"   each value vs {key} = {default} (Holm over {adj_size(comps)} tests):")
+    table(lines, os.path.join(out_dir, f"{name}_table.tex"))
+    sig = {(a, k): adj[i, j] < 0.05 for i, (_, a, _) in enumerate(comps) for j, (k, _, _) in enumerate(METRICS)}
+    return summ, sig
+
+
+def adj_size(comps):
+    return len(comps) * len(METRICS)
+
+
+def plot_factors(results, out):
+    """Depth (top) and UTD (bottom), one column per metric (own y-scale per panel); dagger = Holm-significant."""
+    fig, axes = plt.subplots(2, 3, figsize=(PAGE_W, 4.4), squeeze=False)
+    for row, name in enumerate(("depth", "utd")):
+        summ, sig = results[name]
+        key, values, default, xlabel = FACTORS[name]
+        for j, (k, metric, scale) in enumerate(METRICS):
+            ax = axes[row, j]
+            for ln, ls, face, dx in ((0, "--", "white", -0.06), (1, "-", TD3_COLOR, 0.06)):
+                vals = [[s[k] for s in summ[(name, v, ln)]] for v in values]
+                m = scale * np.array([np.mean(v) for v in vals])
+                lo, hi = (scale * np.array(x) for x in zip(*map(bootstrap_ci, vals)))
+                xs = np.array(values) + dx
+                ax.errorbar(xs, m, yerr=[m - lo, hi - m], color=TD3_COLOR, ls=ls, lw=1.3, marker="o", ms=4.5,
+                            mfc=face, mec=TD3_COLOR, capsize=2)
+                for x, v, top in zip(xs, values, hi):
+                    if sig.get(((name, v, ln), k)):
+                        dagger(ax, x, top, TD3_COLOR)
+            if k == 1:
+                ax.axhline(0, color=GUIDE, lw=0.6)
+            ax.set_xticks(values)
+            ax.set_xlabel(xlabel if j == 1 else xlabel.split(" (")[0].replace("Gradient steps per environment step", "UTD"))
+            ax.set_ylabel(AXIS_LABELS[metric].replace("150k–300k", "50k–100k"))
+            ax.tick_params(labelleft=True)
+            ax.grid(axis="y", color=GRID, lw=0.5)
+    axes[0, 1].set_title("(a) Network depth (TD3, UTD 1, 100k steps)", fontweight="bold", fontsize=9, pad=8)
+    axes[1, 1].set_title("(b) Update-to-data ratio (TD3, 2 hidden layers, 100k steps)", fontweight="bold", fontsize=9, pad=8)
+    from matplotlib.lines import Line2D
+    handles = [Line2D([], [], ls="--", color=TD3_COLOR, marker="o", ms=5, mfc="white", label="no LayerNorm"),
+               Line2D([], [], ls="-", color=TD3_COLOR, marker="o", ms=5, mfc=TD3_COLOR, label="critic LayerNorm")]
+    fig.legend(handles=handles, loc="lower center", ncol=2, frameon=False)
+    fig.tight_layout(rect=(0, 0.045, 1, 1))
+    fig.savefig(out, dpi=300)
+    plt.close(fig)
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--out", default="figs_extra")
@@ -313,6 +412,9 @@ def main():
     sig_d = analysis_d(all_summ, a.out, text)
     if sig_c is not None and sig_d is not None:
         plot_controlled(all_summ, {**sig_c, **sig_d}, os.path.join(a.out, "controlled.png"))
+    factors = {name: analysis_factor(name, a.out, text) for name in FACTORS}
+    if all(r[0] is not None for r in factors.values()):
+        plot_factors(factors, os.path.join(a.out, "depth_utd.png"))
     with open(os.path.join(a.out, "extra_stats.txt"), "w") as fh:
         fh.write("\n".join(text).translate(MINUS) + "\n")
     print("\n".join(text))

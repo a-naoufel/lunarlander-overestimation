@@ -49,3 +49,67 @@ D. Ablation: DDPG + one TD3 change vs DDPG (Holm over 18 tests):
    DDPG + twin critics − DDPG, LN on      final return :  +325.4 [  288.7,   356.9]  p=1.34e−10  Holm p=2.28e−09
    DDPG + twin critics − DDPG, LN on      success (%)  :   +83.7 [   77.3,    89.0]  p=2.91e−15  Holm p=5.24e−14
    DDPG + twin critics − DDPG, LN on      bias         :  −521.4 [ −602.0,  −440.9]  p=7.51e−07  Holm p=1.13e−05
+E. depth (TD3, 100k steps, seeds 0−4): Spearman between n_layers and each per−run metric (n = 25 per LN setting)
+   LN off final return : rho = +0.66, p = 0.000341
+   LN off success (%)  : rho = +0.76, p = 1.13e−05
+   LN off bias         : rho = −0.17, p = 0.409
+   LN on  final return : rho = +0.47, p = 0.0176
+   LN on  success (%)  : rho = +0.58, p = 0.00249
+   LN on  bias         : rho = −0.29, p = 0.159
+   each value vs n_layers = 2 (Holm over 24 tests):
+   layers 1 − layers 2, LN off            final return :   −92.1 [ −171.3,   −14.7]  p=0.0954  Holm p=1
+   layers 1 − layers 2, LN off            success (%)  :   −14.7 [  −31.3,    −2.0]  p=0.163  Holm p=1
+   layers 1 − layers 2, LN off            bias         :   +19.0 [    6.0,    31.0]  p=0.0363  Holm p=0.835
+   layers 3 − layers 2, LN off            final return :   +20.7 [  −65.7,   108.6]  p=0.689  Holm p=1
+   layers 3 − layers 2, LN off            success (%)  :   +16.7 [   −4.0,    36.7]  p=0.183  Holm p=1
+   layers 3 − layers 2, LN off            bias         :   +13.5 [  −13.4,    48.3]  p=0.489  Holm p=1
+   layers 4 − layers 2, LN off            final return :   +90.3 [    2.2,   178.0]  p=0.116  Holm p=1
+   layers 4 − layers 2, LN off            success (%)  :   +33.3 [    9.3,    54.0]  p=0.0325  Holm p=0.779
+   layers 4 − layers 2, LN off            bias         :    +7.8 [  −12.2,    28.2]  p=0.524  Holm p=1
+   layers 5 − layers 2, LN off            final return :   +69.5 [  −41.2,   169.3]  p=0.28  Holm p=1
+   layers 5 − layers 2, LN off            success (%)  :   +32.0 [    6.0,    54.0]  p=0.0548  Holm p=1
+   layers 5 − layers 2, LN off            bias         :   +12.8 [  −13.3,    45.8]  p=0.49  Holm p=1
+   layers 1 − layers 2, LN on             final return :   −81.3 [ −178.5,    24.4]  p=0.228  Holm p=1
+   layers 1 − layers 2, LN on             success (%)  :   −32.7 [  −55.3,   −10.0]  p=0.068  Holm p=1
+   layers 1 − layers 2, LN on             bias         :   +14.4 [    2.6,    26.8]  p=0.0749  Holm p=1
+   layers 3 − layers 2, LN on             final return :   +67.0 [  −43.0,   181.1]  p=0.332  Holm p=1
+   layers 3 − layers 2, LN on             success (%)  :   +14.0 [  −15.3,    42.0]  p=0.421  Holm p=1
+   layers 3 − layers 2, LN on             bias         :    +3.6 [  −10.1,    18.8]  p=0.68  Holm p=1
+   layers 4 − layers 2, LN on             final return :   +71.2 [  −43.6,   189.4]  p=0.324  Holm p=1
+   layers 4 − layers 2, LN on             success (%)  :   +16.0 [  −16.0,    48.0]  p=0.41  Holm p=1
+   layers 4 − layers 2, LN on             bias         :    +3.7 [  −11.0,    18.1]  p=0.673  Holm p=1
+   layers 5 − layers 2, LN on             final return :  −166.8 [ −757.1,   199.8]  p=0.592  Holm p=1
+   layers 5 − layers 2, LN on             success (%)  :   +21.3 [  −16.0,    56.0]  p=0.324  Holm p=1
+   layers 5 − layers 2, LN on             bias         :    −5.2 [  −25.1,    10.9]  p=0.633  Holm p=1
+F. utd (TD3, 100k steps, seeds 0−4): Spearman between utd and each per−run metric (n = 25 per LN setting)
+   LN off final return : rho = +0.01, p = 0.97
+   LN off success (%)  : rho = −0.01, p = 0.976
+   LN off bias         : rho = −0.31, p = 0.127
+   LN on  final return : rho = +0.08, p = 0.709
+   LN on  success (%)  : rho = +0.12, p = 0.568
+   LN on  bias         : rho = −0.14, p = 0.501
+   each value vs utd = 1 (Holm over 24 tests):
+   UTD 2 − UTD 1, LN off                  final return :   +17.5 [ −105.9,   145.3]  p=0.814  Holm p=1
+   UTD 2 − UTD 1, LN off                  success (%)  :   +21.3 [  −10.7,    52.0]  p=0.28  Holm p=1
+   UTD 2 − UTD 1, LN off                  bias         :    −2.0 [  −15.0,     9.6]  p=0.785  Holm p=1
+   UTD 3 − UTD 1, LN off                  final return :    −9.0 [ −116.4,    99.0]  p=0.887  Holm p=1
+   UTD 3 − UTD 1, LN off                  success (%)  :    +4.0 [  −20.7,    29.3]  p=0.787  Holm p=1
+   UTD 3 − UTD 1, LN off                  bias         :    −4.0 [  −22.8,    16.3]  p=0.741  Holm p=1
+   UTD 4 − UTD 1, LN off                  final return :   −20.7 [ −119.9,    89.8]  p=0.739  Holm p=1
+   UTD 4 − UTD 1, LN off                  success (%)  :    −0.7 [  −26.0,    30.7]  p=0.969  Holm p=1
+   UTD 4 − UTD 1, LN off                  bias         :   −12.0 [  −25.5,     1.0]  p=0.159  Holm p=1
+   UTD 5 − UTD 1, LN off                  final return :   +15.5 [ −134.6,   155.8]  p=0.859  Holm p=1
+   UTD 5 − UTD 1, LN off                  success (%)  :   +18.0 [  −12.0,    48.7]  p=0.346  Holm p=1
+   UTD 5 − UTD 1, LN off                  bias         :   −11.1 [  −29.5,     5.6]  p=0.303  Holm p=1
+   UTD 2 − UTD 1, LN on                   final return :   +82.3 [  −24.6,   196.2]  p=0.243  Holm p=1
+   UTD 2 − UTD 1, LN on                   success (%)  :   +17.3 [  −12.0,    47.3]  p=0.337  Holm p=1
+   UTD 2 − UTD 1, LN on                   bias         :    +3.6 [   −8.2,    16.0]  p=0.616  Holm p=1
+   UTD 3 − UTD 1, LN on                   final return :   +19.5 [ −109.7,   148.4]  p=0.798  Holm p=1
+   UTD 3 − UTD 1, LN on                   success (%)  :    +0.0 [  −32.7,    32.0]  p=1  Holm p=1
+   UTD 3 − UTD 1, LN on                   bias         :    −0.6 [  −13.1,    12.4]  p=0.935  Holm p=1
+   UTD 4 − UTD 1, LN on                   final return :    +2.9 [ −134.0,   139.3]  p=0.971  Holm p=1
+   UTD 4 − UTD 1, LN on                   success (%)  :    −2.7 [  −36.7,    31.3]  p=0.894  Holm p=1
+   UTD 4 − UTD 1, LN on                   bias         :    −2.2 [  −13.0,     9.0]  p=0.739  Holm p=1
+   UTD 5 − UTD 1, LN on                   final return :   +66.9 [  −65.4,   204.8]  p=0.409  Holm p=1
+   UTD 5 − UTD 1, LN on                   success (%)  :   +22.7 [  −10.0,    56.0]  p=0.261  Holm p=1
+   UTD 5 − UTD 1, LN on                   bias         :    −0.6 [  −10.3,     9.8]  p=0.915  Holm p=1

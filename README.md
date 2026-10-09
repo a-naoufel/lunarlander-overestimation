@@ -56,14 +56,34 @@ critics with the min target (+CDQ). Each with and without LayerNorm, 10 seeds (1
 Holm correction over the 18 Welch tests of each row. All numbers, including the two planned analyses
 of the main runs: [`figs_extra/extra_stats.txt`](figs_extra/extra_stats.txt).*
 
+Two later experiments, also planned in `ANALYSIS_PLAN.md` before they were run (sections E–G):
+(c) TD3 with 1–5 hidden layers or 1–5 gradient steps per environment step (UTD), with and without
+LayerNorm, 5 seeds, 100k steps (80 runs in `runs/depth` and `runs/utd`); (d) DDPG and TD3, with and
+without LayerNorm, 10 seeds, 600k steps (40 runs in `runs/long`).
+
+![Depth and update-to-data ratio](figs_extra/depth_utd.png)
+
+*Depth and UTD of TD3 after 100k steps (5 seeds; † would mark a difference from the default after a
+Holm correction, none survives). Numbers: [`figs_extra/extra_stats.txt`](figs_extra/extra_stats.txt).*
+
+![Longer training](figs_extra/long.png)
+
+*Top: our code with 600k steps (10 seeds); bottom: the Stable-Baselines3 replication with 300k steps
+(5 seeds); dashed line: half of the training. Without LayerNorm, DDPG catches up with TD3 at 600k
+steps (213 vs. 216); with LayerNorm it does not (14 vs. 244). Numbers:
+[`figs_extra/long_stats.txt`](figs_extra/long_stats.txt).*
+
 ## Replication with Stable-Baselines3
 
 [`mp-sb3/`](mp-sb3) repeats the main design (DDPG / TD3 × critic LayerNorm, seeds 0–4) with the DDPG
-and TD3 of Stable-Baselines3 2.9 and that code base's settings (150k steps, γ = 0.98, learning rate
-10⁻³, τ = 0.01, 100k buffer, 5k warm-up steps), plus TD3 with 1 or 5 critics in the min target
-(`mp-sb3/results/bias`). Its own figures are in [`mp-sb3/figures`](mp-sb3/figures); the statistics
-in the report (the comparisons of the main table, Holm correction over their 15 tests) come from
-`analyze_sb3.py`: [`figs_extra/sb3_stats.txt`](figs_extra/sb3_stats.txt).
+and TD3 of Stable-Baselines3 2.9 and that code base's settings (γ = 0.98, learning rate 10⁻³,
+τ = 0.01, 100k buffer, 5k warm-up steps): with its default 150k steps (`mp-sb3/results`, plus TD3
+with 1 or 5 critics in the min target) and with the 300k steps of our runs (`mp-sb3/results_300k`,
+whose first 150k steps are identical to the 150k runs). Its own figures (150k) are in
+[`mp-sb3/figures`](mp-sb3/figures); the statistics in the report (the comparisons of the main table,
+Holm correction over their 15 tests) come from `analyze_sb3.py`:
+[`figs_extra/sb3_300k_stats.txt`](figs_extra/sb3_300k_stats.txt) and
+[`figs_extra/sb3_stats.txt`](figs_extra/sb3_stats.txt) (150k).
 
 ## Method in short
 
@@ -105,6 +125,9 @@ exploration noise N(0, 0.1²), TD3 smoothing noise 0.2 clipped at 0.5, one gradi
 | `figs_extra` | figures, LaTeX tables and statistics of the additional analyses |
 | `mp-sb3/` | Stable-Baselines3 replication: code, per-run CSV/JSON logs, figures |
 | `analyze_sb3.py` | statistics of the Stable-Baselines3 replication |
+| `runs/depth`, `runs/utd`, `runs/long` | JSON logs of the depth / UTD runs (80) and of the 600k-step runs (40) |
+| `jobs_depth_utd.txt`, `jobs_long.txt` | job lists of these runs (for `run_jobs.sh`) |
+| `analyze_long.py` | longer-training analysis (our 600k runs and SB3 at 300k) |
 | `report/figs` | generated figures, results table and statistics |
 
 ## Reproduce
@@ -124,6 +147,10 @@ python analyze_extra.py                                                # additio
 python td3.py --algo td3 --seed 0 --save-ckpt 1 --out runs/showcase    # save new agents, then:
 python watch.py runs/showcase/*.pt                                     # watch them land
 python analyze_sb3.py mp-sb3/results/core                              # statistics of the SB3 replication
+./run_jobs.sh jobs_depth_utd.txt 20                                    # depth and UTD runs (100k steps)
+./run_jobs.sh jobs_long.txt 20                                         # 600k-step runs
+python analyze_long.py                                                 # longer training (+ SB3 at 300k)
+python analyze_sb3.py mp-sb3/results_300k/core                         # SB3 replication at 300k steps
 ```
 
 The Stable-Baselines3 replication has its own environment (see [`mp-sb3/README.md`](mp-sb3/README.md)).

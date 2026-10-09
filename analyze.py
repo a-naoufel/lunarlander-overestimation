@@ -171,7 +171,7 @@ def diff_heading(summ, a, b, k):
 
 def plot_curves(groups, summ, cols, out):
     rows = [("return_mean", "Evaluation return", 0, 0), ("bias", "Bias  Q₁ − MC return", WARMUP, 1)]
-    fig, axes = plt.subplots(2, 2, figsize=(PAGE_W, 4.9), sharex=True, sharey="row", squeeze=False)
+    fig, axes = plt.subplots(2, 2, figsize=(PAGE_W, 3.9), sharex=True, sharey="row", squeeze=False)
     for i, (key, ylabel, min_step, k) in enumerate(rows):
         for j, ln in enumerate((0, 1)):
             ax = axes[i, j]

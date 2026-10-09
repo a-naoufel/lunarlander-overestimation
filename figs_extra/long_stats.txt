@@ -1,0 +1,14 @@
+Our code: 600k steps; 'half' = the same metrics at 300k steps
+  DDPG LN off n=10  return at 300k   75.5 -> at 600k  213.2  change +137.8 [+101.4, +170.4] p=3.94e-05 Holm p=0.000197 | success 77.3%  bias   75.0  runs ending >= 200: 6/10  runs with an evaluation >= 200: 10/10
+  DDPG LN on  n=10  return at 300k -122.8 -> at 600k   14.0  change +136.8 [+34.5, +220.0] p=0.0229 Holm p=0.0602 | success 23.7%  bias  324.2  runs ending >= 200: 0/10  runs with an evaluation >= 200: 1/10
+  TD3  LN off n=10  return at 300k  174.9 -> at 600k  216.1  change  +41.2 [+19.9, +64.7] p=0.00749 Holm p=0.03 | success 79.0%  bias  -13.9  runs ending >= 200: 8/10  runs with an evaluation >= 200: 8/10
+  TD3  LN on  n=10  return at 300k  175.2 -> at 600k  244.3  change  +69.1 [+37.1, +119.9] p=0.0201 Holm p=0.0602 | success 89.0%  bias  -10.1  runs ending >= 200: 9/10  runs with an evaluation >= 200: 9/10
+  TD3 - DDPG at 600k, LN off:   +2.9 [-75.7, +68.8] p=0.943 Holm p=0.943
+  TD3 - DDPG at 600k, LN on : +230.3 [+153.1, +302.0] p=2.66e-05 Holm p=0.00016
+SB3 code: 300k steps; 'half' = the same metrics at 150k steps
+  DDPG LN off n= 5  return at 150k  115.4 -> at 300k   70.3  change  -45.1 [-98.4, +5.9] p=0.214 Holm p=0.428 | success 41.6%  bias   74.8  runs ending >= 200: 0/5  runs with an evaluation >= 200: 5/5
+  DDPG LN on  n= 5  return at 150k  -36.0 -> at 300k  -21.2  change  +14.9 [-53.3, +104.5] p=0.768 Holm p=0.768 | success 17.6%  bias  154.7  runs ending >= 200: 0/5  runs with an evaluation >= 200: 2/5
+  TD3  LN off n= 5  return at 150k   39.4 -> at 300k  145.2  change +105.8 [+77.5, +133.0] p=0.00283 Holm p=0.017 | success 61.6%  bias   -2.4  runs ending >= 200: 0/5  runs with an evaluation >= 200: 5/5
+  TD3  LN on  n= 5  return at 150k   75.1 -> at 300k  207.7  change +132.6 [+74.5, +190.8] p=0.0164 Holm p=0.0654 | success 78.8%  bias   -1.5  runs ending >= 200: 3/5  runs with an evaluation >= 200: 5/5
+  TD3 - DDPG at 300k, LN off:  +74.9 [+27.1, +117.9] p=0.0207 Holm p=0.0654
+  TD3 - DDPG at 300k, LN on : +228.8 [+147.9, +302.9] p=0.00339 Holm p=0.017
