@@ -1,0 +1,12 @@
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Comparison & Final return & Success (\%) & Bias \\
+\midrule
+DDPG + delayed updates $-$ DDPG, LN off & $26$ {\scriptsize[$-49$, $102$]}, $p=0.53$ & $5$ {\scriptsize[$-10$, $21$]}, $p=0.52$ & $10$ {\scriptsize[$-38$, $60$]}, $p=0.7$ \\
+DDPG + target smoothing $-$ DDPG, LN off & $119$ {\scriptsize[$42$, $195$]}, $p=0.01$ & $25$ {\scriptsize[$5$, $46$]}, $p=0.04$ & $-76$ {\scriptsize[$-114$, $-40$]}, $p=0.0022$$^\dagger$ \\
+DDPG + twin critics $-$ DDPG, LN off & $250$ {\scriptsize[$198$, $302$]}, $p<0.001$$^\dagger$ & $72$ {\scriptsize[$59$, $83$]}, $p<0.001$$^\dagger$ & $-170$ {\scriptsize[$-205$, $-138$]}, $p<0.001$$^\dagger$ \\
+DDPG + delayed updates $-$ DDPG, LN on & $-31$ {\scriptsize[$-73$, $10$]}, $p=0.18$ & $-1$ {\scriptsize[$-6$, $3$]}, $p=0.57$ & $-159$ {\scriptsize[$-266$, $-51$]}, $p=0.013$ \\
+DDPG + target smoothing $-$ DDPG, LN on & $45$ {\scriptsize[$-19$, $113$]}, $p=0.22$ & $14$ {\scriptsize[$2$, $27$]}, $p=0.068$ & $-323$ {\scriptsize[$-422$, $-224$]}, $p<0.001$$^\dagger$ \\
+DDPG + twin critics $-$ DDPG, LN on & $325$ {\scriptsize[$289$, $357$]}, $p<0.001$$^\dagger$ & $84$ {\scriptsize[$77$, $89$]}, $p<0.001$$^\dagger$ & $-521$ {\scriptsize[$-602$, $-441$]}, $p<0.001$$^\dagger$ \\
+\bottomrule
+\end{tabular}

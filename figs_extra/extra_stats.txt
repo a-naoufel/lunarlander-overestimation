@@ -4,5 +4,48 @@ A. Early bias (50k−150k) vs later improvement (final − return at 140k−160k
    TD3            (n = 20): rho = +0.13, p = 0.603
    TD3, β = 0.75  (n = 20): rho = −0.11, p = 0.655
 B. Bias vs final return within conditions (z−scores, n = 60): r = −0.37, p = 0.005
-C. dose−response: runs not available yet
-D. ablation: runs not available yet
+C. Dose−response on beta (TD3): Spearman between beta and each per−run metric (n = 50 per LN setting)
+   LN off final return : rho = +0.63, p = 8.5e−07
+   LN off success (%)  : rho = +0.48, p = 0.0004
+   LN off bias         : rho = −0.97, p = 6.68e−32
+   LN on  final return : rho = +0.80, p = 1.93e−12
+   LN on  success (%)  : rho = +0.73, p = 1.93e−09
+   LN on  bias         : rho = −0.98, p = 8.13e−35
+   each beta vs beta = 1 (Holm over 18 tests):
+   β = 0.5 − TD3, LN off                  final return :   −42.9 [ −135.7,    51.1]  p=0.403  Holm p=1
+   β = 0.5 − TD3, LN off                  success (%)  :   −11.3 [  −43.3,    21.3]  p=0.515  Holm p=1
+   β = 0.5 − TD3, LN off                  bias         :   +58.4 [   48.3,    69.6]  p=1.04e−06  Holm p=1.45e−05
+   β = 0.25 − TD3, LN off                 final return :   −76.2 [ −155.4,     5.1]  p=0.0899  Holm p=0.539
+   β = 0.25 − TD3, LN off                 success (%)  :   −19.0 [  −46.7,     8.7]  p=0.217  Holm p=1
+   β = 0.25 − TD3, LN off                 bias         :  +120.4 [  102.5,   138.7]  p=4.12e−07  Holm p=6.6e−06
+   β = 0 − TD3, LN off                    final return :  −257.6 [ −346.8,  −169.4]  p=4.61e−05  Holm p=0.000461
+   β = 0 − TD3, LN off                    success (%)  :   −45.0 [  −68.7,   −21.7]  p=0.00576  Holm p=0.0403
+   β = 0 − TD3, LN off                    bias         :  +277.7 [  237.9,   319.7]  p=4.83e−07  Holm p=7.25e−06
+   β = 0.5 − TD3, LN on                   final return :   −15.9 [  −66.7,    45.7]  p=0.611  Holm p=1
+   β = 0.5 − TD3, LN on                   success (%)  :    −5.3 [  −22.7,    16.3]  p=0.626  Holm p=1
+   β = 0.5 − TD3, LN on                   bias         :   +58.3 [   51.4,    65.2]  p=4.58e−09  Holm p=8.25e−08
+   β = 0.25 − TD3, LN on                  final return :  −222.3 [ −290.1,  −146.5]  p=1.79e−05  Holm p=0.000215
+   β = 0.25 − TD3, LN on                  success (%)  :   −53.3 [  −72.3,   −30.7]  p=0.000271  Holm p=0.00217
+   β = 0.25 − TD3, LN on                  bias         :  +185.8 [  145.3,   239.9]  p=5.78e−05  Holm p=0.000521
+   β = 0 − TD3, LN on                     final return :  −338.1 [ −387.1,  −280.2]  p=6.42e−08  Holm p=1.09e−06
+   β = 0 − TD3, LN on                     success (%)  :   −73.3 [  −88.3,   −53.7]  p=2.86e−05  Holm p=0.000315
+   β = 0 − TD3, LN on                     bias         :  +548.4 [  472.1,   647.4]  p=1.03e−06  Holm p=1.45e−05
+D. Ablation: DDPG + one TD3 change vs DDPG (Holm over 18 tests):
+   DDPG + delayed updates − DDPG, LN off  final return :   +26.3 [  −48.7,   102.3]  p=0.526  Holm p=1
+   DDPG + delayed updates − DDPG, LN off  success (%)  :    +5.3 [   −9.7,    20.7]  p=0.518  Holm p=1
+   DDPG + delayed updates − DDPG, LN off  bias         :   +10.2 [  −38.1,    59.8]  p=0.698  Holm p=1
+   DDPG + target smoothing − DDPG, LN off final return :  +119.2 [   41.7,   195.4]  p=0.0104  Holm p=0.104
+   DDPG + target smoothing − DDPG, LN off success (%)  :   +25.3 [    5.0,    45.7]  p=0.0397  Holm p=0.317
+   DDPG + target smoothing − DDPG, LN off bias         :   −75.7 [ −114.5,   −40.0]  p=0.00221  Holm p=0.0243
+   DDPG + twin critics − DDPG, LN off     final return :  +250.2 [  198.3,   302.5]  p=1.33e−06  Holm p=1.86e−05
+   DDPG + twin critics − DDPG, LN off     success (%)  :   +71.7 [   59.3,    83.0]  p=2.64e−09  Holm p=4.22e−08
+   DDPG + twin critics − DDPG, LN off     bias         :  −170.1 [ −205.3,  −138.1]  p=5.23e−06  Holm p=6.8e−05
+   DDPG + delayed updates − DDPG, LN on   final return :   −31.1 [  −72.8,     9.7]  p=0.18  Holm p=1
+   DDPG + delayed updates − DDPG, LN on   success (%)  :    −1.3 [   −6.0,     2.7]  p=0.571  Holm p=1
+   DDPG + delayed updates − DDPG, LN on   bias         :  −159.5 [ −266.1,   −50.6]  p=0.013  Holm p=0.117
+   DDPG + target smoothing − DDPG, LN on  final return :   +45.3 [  −18.9,   112.7]  p=0.223  Holm p=1
+   DDPG + target smoothing − DDPG, LN on  success (%)  :   +13.7 [    2.0,    26.7]  p=0.0682  Holm p=0.477
+   DDPG + target smoothing − DDPG, LN on  bias         :  −323.0 [ −421.5,  −223.7]  p=1.47e−05  Holm p=0.000177
+   DDPG + twin critics − DDPG, LN on      final return :  +325.4 [  288.7,   356.9]  p=1.34e−10  Holm p=2.28e−09
+   DDPG + twin critics − DDPG, LN on      success (%)  :   +83.7 [   77.3,    89.0]  p=2.91e−15  Holm p=5.24e−14
+   DDPG + twin critics − DDPG, LN on      bias         :  −521.4 [ −602.0,  −440.9]  p=7.51e−07  Holm p=1.13e−05

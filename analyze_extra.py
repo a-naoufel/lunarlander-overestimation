@@ -145,10 +145,11 @@ def family(summ, comparisons, text, title):
         cells = []
         for (est, lo, hi, p), pa, (_, metric, scale) in zip(row, row_adj, METRICS):
             cells.append(f"{fmt(est, lo, hi, scale)}, {fmt_p(p)}" + (r"$^\dagger$" if pa < 0.05 else ""))
-            text.append(f"   {label:34s} {metric:13s}: {scale * est:+7.1f} [{scale * lo:7.1f}, {scale * hi:7.1f}]"
+            plain = label.replace("$\\beta", "β").replace("$-$", "-").replace("$", "")
+            text.append(f"   {plain:38s} {metric:13s}: {scale * est:+7.1f} [{scale * lo:7.1f}, {scale * hi:7.1f}]"
                         f"  p={p:.3g}  Holm p={pa:.3g}")
         lines.append(f"{label} & " + " & ".join(cells) + r" \\")
-    return lines
+    return lines, adj
 
 
 def table(lines, out):
@@ -172,7 +173,9 @@ def analysis_c(summ, out_dir, text):
             text.append(f"   LN {'on ' if ln else 'off'} {metric:13s}: rho = {rho:+.2f}, p = {p:.3g}")
     comps = [(f"$\\beta = {b:g}$ $-$ TD3, LN {'on' if ln else 'off'}", keys[(b, ln)], keys[(1.0, ln)])
              for ln in (0, 1) for b in (0.5, 0.25, 0.0)]
-    table(family(summ, comps, text, "   each beta vs beta = 1 (Holm over 18 tests):"), os.path.join(out_dir, "dose_table.tex"))
+    lines, adj = family(summ, comps, text, "   each beta vs beta = 1 (Holm over 18 tests):")
+    table(lines, os.path.join(out_dir, "dose_table.tex"))
+    sig = {(a, k): adj[i, j] < 0.05 for i, (_, a, _) in enumerate(comps) for j, (k, _, _) in enumerate(METRICS)}
     fig, axes = plt.subplots(1, 3, figsize=(PAGE_W, 2.6), squeeze=False)
     for j, (k, metric, scale) in enumerate(METRICS):
         ax = axes[0, j]
@@ -193,6 +196,7 @@ def analysis_c(summ, out_dir, text):
     fig.tight_layout(rect=(0, 0.1, 1, 1))
     fig.savefig(os.path.join(out_dir, "dose.png"), dpi=300)
     plt.close(fig)
+    return sig
 
 
 def analysis_d(summ, out_dir, text):
@@ -202,8 +206,9 @@ def analysis_d(summ, out_dir, text):
         return
     comps = [(f"{variant_name(v)} $-$ DDPG, LN {'on' if ln else 'off'}", (v, ln), (DDPG, ln))
              for ln in (0, 1) for v in ABLATIONS]
-    table(family(summ, comps, text, "D. Ablation: DDPG + one TD3 change vs DDPG (Holm over 18 tests):"),
-          os.path.join(out_dir, "ablation_table.tex"))
+    lines, adj = family(summ, comps, text, "D. Ablation: DDPG + one TD3 change vs DDPG (Holm over 18 tests):")
+    table(lines, os.path.join(out_dir, "ablation_table.tex"))
+    sig = {(a, k): adj[i, j] < 0.05 for i, (_, a, _) in enumerate(comps) for j, (k, _, _) in enumerate(METRICS)}
     fig, axes = plt.subplots(1, 3, figsize=(PAGE_W, 2.5), sharey=True, squeeze=False)
     ypos = np.arange(len(names))[::-1]
     for j, (k, metric, scale) in enumerate(METRICS):
@@ -229,6 +234,66 @@ def analysis_d(summ, out_dir, text):
     fig.tight_layout(rect=(0, 0.1, 1, 1))
     fig.savefig(os.path.join(out_dir, "ablation.png"), dpi=300)
     plt.close(fig)
+    return sig
+
+
+AXIS_LABELS = {"final return": "Final return", "success (%)": "Success rate (%)", "bias": "Bias (150k–300k)"}
+SHORT = {DDPG: "DDPG", ABLATIONS[0]: "+DP", ABLATIONS[1]: "+TPS", ABLATIONS[2]: "+CDQ", TD3: "TD3"}
+
+
+def dagger(ax, x, top, color):
+    """Mark a point whose difference with its reference survives the Holm correction."""
+    ax.annotate("†", (x, top), xytext=(0, 1), textcoords="offset points", ha="center", va="bottom",
+                fontsize=8.5, color=color)
+
+
+def plot_controlled(summ, sig, out):
+    """Report figure: (a) dose-response on beta, (b) ablation; one column per metric, y shared per column."""
+    fig, axes = plt.subplots(2, 3, figsize=(PAGE_W, 4.4), sharey="col", squeeze=False)
+    names = (DDPG, *ABLATIONS, TD3)
+    for j, (k, metric, scale) in enumerate(METRICS):
+        ax = axes[0, j]
+        for ln, ls, face, dx in ((0, "--", "white", -0.025), (1, "-", TD3_COLOR, 0.025)):  # side by side
+            keys = [(("td3", 1, 1, 2, b), ln) for b in BETAS]
+            vals = [[s[k] for s in summ[key]] for key in keys]
+            m = scale * np.array([np.mean(v) for v in vals])
+            lo, hi = (scale * np.array(x) for x in zip(*map(bootstrap_ci, vals)))
+            xs = np.array(BETAS) + dx
+            ax.errorbar(xs, m, yerr=[m - lo, hi - m], color=TD3_COLOR, ls=ls, lw=1.3, marker="o", ms=4.5,
+                        mfc=face, mec=TD3_COLOR, capsize=2)
+            for x, key, top in zip(xs, keys, hi):
+                if sig.get((key, k)):
+                    dagger(ax, x, top, TD3_COLOR)
+        ax.set_xticks(BETAS)
+        ax.set_xlabel("TD3 target weight β")
+        ax = axes[1, j]
+        for ln, dx in ((0, -0.15), (1, 0.15)):
+            for x, v in enumerate(names):
+                vals = [s[k] for s in summ[(v, ln)]]
+                m, (lo, hi) = scale * np.mean(vals), scale * np.array(bootstrap_ci(vals))
+                color = TD3_COLOR if v == TD3 else DDPG_COLOR
+                ax.errorbar(x + dx, m, yerr=[[m - lo], [hi - m]], color=color, marker="o", ms=4.5, lw=1.2,
+                            capsize=2, mfc=color if ln else "white", mec=color)
+                if sig.get(((v, ln), k)):
+                    dagger(ax, x + dx, hi, color)
+        ax.set_xticks(range(len(names)))
+        ax.set_xticklabels([SHORT[v] for v in names], fontsize=7.2)
+        for row in (0, 1):
+            a = axes[row, j]
+            if k == 1:
+                a.axhline(0, color=GUIDE, lw=0.6)
+            a.set_ylabel(AXIS_LABELS[metric])
+            a.tick_params(labelleft=True)
+            a.grid(axis="y", color=GRID, lw=0.5)
+    axes[0, 1].set_title("(a) Dose-response: TD3 with target weight β", fontweight="bold", fontsize=9, pad=8)
+    axes[1, 1].set_title("(b) Ablation: DDPG plus one TD3 change", fontweight="bold", fontsize=9, pad=8)
+    from matplotlib.lines import Line2D
+    handles = [Line2D([], [], ls="", marker="o", ms=5, mfc="white", mec=MUTED, label="no LayerNorm"),
+               Line2D([], [], ls="", marker="o", ms=5, mfc=MUTED, mec=MUTED, label="critic LayerNorm")]
+    fig.legend(handles=handles, loc="lower center", ncol=2, frameon=False)
+    fig.tight_layout(rect=(0, 0.045, 1, 1))
+    fig.savefig(out, dpi=300)
+    plt.close(fig)
 
 
 def main():
@@ -244,8 +309,10 @@ def main():
     analysis_a(main_groups, text)
     analysis_b(summaries(main_groups), text)
     all_summ = summaries(load_runs(["runs/core", "runs/beta075", "runs/dose", "runs/ablation"]))
-    analysis_c(all_summ, a.out, text)
-    analysis_d(all_summ, a.out, text)
+    sig_c = analysis_c(all_summ, a.out, text)
+    sig_d = analysis_d(all_summ, a.out, text)
+    if sig_c is not None and sig_d is not None:
+        plot_controlled(all_summ, {**sig_c, **sig_d}, os.path.join(a.out, "controlled.png"))
     with open(os.path.join(a.out, "extra_stats.txt"), "w") as fh:
         fh.write("\n".join(text).translate(MINUS) + "\n")
     print("\n".join(text))

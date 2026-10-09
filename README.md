@@ -40,6 +40,22 @@ python watch.py noop agents/td3_ln10_L2_utd1_pd2_s0.pt         # do-nothing base
 python qgrid.py agents/*.pt                                     # Q-value heatmaps of the critics
 ```
 
+## Additional experiments
+
+Specified in [`ANALYSIS_PLAN.md`](ANALYSIS_PLAN.md) before they were computed, and reported as
+exploratory: (a) a dose-response on the target weight, TD3 with β ∈ {0, 0.25, 0.5, 0.75, 1}
+(β = 1 is standard TD3, a smaller β a less pessimistic target); (b) an ablation adding a single
+TD3 change to DDPG: delayed actor and target updates (+DP), target policy smoothing (+TPS) or twin
+critics with the min target (+CDQ). Each with and without LayerNorm, 10 seeds (120 runs in
+`runs/dose` and `runs/ablation`).
+
+![Dose-response and ablation](figs_extra/controlled.png)
+
+*Mean over 10 seeds with 95% bootstrap CI; hollow: no LayerNorm, filled: LayerNorm in the critics.
+†: different from the reference (standard TD3 in (a), tested for β ≤ 0.5; DDPG in (b)) after a
+Holm correction over the 18 Welch tests of each row. All numbers, including the two planned analyses
+of the main runs: [`figs_extra/extra_stats.txt`](figs_extra/extra_stats.txt).*
+
 ## Method in short
 
 - **Algorithms** (`td3.py`): one PyTorch file, so that DDPG and TD3 differ only by TD3's three
@@ -76,6 +92,8 @@ exploration noise N(0, 0.1²), TD3 smoothing noise 0.2 clipped at 0.5, one gradi
 | `agents/` | the six seed-0 agents (actor and critics) after 300k steps |
 | `media/` | recorded simulations (GIF for this page, MP4 with three landings) |
 | `runs/core`, `runs/beta075` | JSON logs of the 60 main runs (config + every evaluation) |
+| `runs/dose`, `runs/ablation` | JSON logs of the 120 runs of the additional experiments |
+| `figs_extra` | figures, LaTeX tables and statistics of the additional analyses |
 | `report/figs` | generated figures, results table and statistics |
 
 ## Reproduce

@@ -1,0 +1,12 @@
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Comparison & Final return & Success (\%) & Bias \\
+\midrule
+$\beta = 0.5$ $-$ TD3, LN off & $-43$ {\scriptsize[$-136$, $51$]}, $p=0.4$ & $-11$ {\scriptsize[$-43$, $21$]}, $p=0.51$ & $58$ {\scriptsize[$48$, $70$]}, $p<0.001$$^\dagger$ \\
+$\beta = 0.25$ $-$ TD3, LN off & $-76$ {\scriptsize[$-155$, $5$]}, $p=0.09$ & $-19$ {\scriptsize[$-47$, $9$]}, $p=0.22$ & $120$ {\scriptsize[$102$, $139$]}, $p<0.001$$^\dagger$ \\
+$\beta = 0$ $-$ TD3, LN off & $-258$ {\scriptsize[$-347$, $-169$]}, $p<0.001$$^\dagger$ & $-45$ {\scriptsize[$-69$, $-22$]}, $p=0.0058$$^\dagger$ & $278$ {\scriptsize[$238$, $320$]}, $p<0.001$$^\dagger$ \\
+$\beta = 0.5$ $-$ TD3, LN on & $-16$ {\scriptsize[$-67$, $46$]}, $p=0.61$ & $-5$ {\scriptsize[$-23$, $16$]}, $p=0.63$ & $58$ {\scriptsize[$51$, $65$]}, $p<0.001$$^\dagger$ \\
+$\beta = 0.25$ $-$ TD3, LN on & $-222$ {\scriptsize[$-290$, $-146$]}, $p<0.001$$^\dagger$ & $-53$ {\scriptsize[$-72$, $-31$]}, $p<0.001$$^\dagger$ & $186$ {\scriptsize[$145$, $240$]}, $p<0.001$$^\dagger$ \\
+$\beta = 0$ $-$ TD3, LN on & $-338$ {\scriptsize[$-387$, $-280$]}, $p<0.001$$^\dagger$ & $-73$ {\scriptsize[$-88$, $-54$]}, $p<0.001$$^\dagger$ & $548$ {\scriptsize[$472$, $647$]}, $p<0.001$$^\dagger$ \\
+\bottomrule
+\end{tabular}
