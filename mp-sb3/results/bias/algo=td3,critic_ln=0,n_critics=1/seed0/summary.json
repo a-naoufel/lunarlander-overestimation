@@ -1,0 +1,13 @@
+{
+  "status": "done",
+  "n_evals": 30,
+  "steps": 150000,
+  "time_s": 1122.4739162921906,
+  "final_return_mean": 141.64444068010226,
+  "final_bias": 36.9413398681502,
+  "final_bias_norm": 8.889185534117328,
+  "final_bias_min": 36.9413398681502,
+  "final_q_gap": null,
+  "final_q_mean": 54.339385223388675,
+  "final_mc_mean": 17.398046378944564
+}

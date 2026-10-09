@@ -56,6 +56,15 @@ critics with the min target (+CDQ). Each with and without LayerNorm, 10 seeds (1
 Holm correction over the 18 Welch tests of each row. All numbers, including the two planned analyses
 of the main runs: [`figs_extra/extra_stats.txt`](figs_extra/extra_stats.txt).*
 
+## Replication with Stable-Baselines3
+
+[`mp-sb3/`](mp-sb3) repeats the main design (DDPG / TD3 × critic LayerNorm, seeds 0–4) with the DDPG
+and TD3 of Stable-Baselines3 2.9 and that code base's settings (150k steps, γ = 0.98, learning rate
+10⁻³, τ = 0.01, 100k buffer, 5k warm-up steps), plus TD3 with 1 or 5 critics in the min target
+(`mp-sb3/results/bias`). Its own figures are in [`mp-sb3/figures`](mp-sb3/figures); the statistics
+in the report (the comparisons of the main table, Holm correction over their 15 tests) come from
+`analyze_sb3.py`: [`figs_extra/sb3_stats.txt`](figs_extra/sb3_stats.txt).
+
 ## Method in short
 
 - **Algorithms** (`td3.py`): one PyTorch file, so that DDPG and TD3 differ only by TD3's three
@@ -94,6 +103,8 @@ exploration noise N(0, 0.1²), TD3 smoothing noise 0.2 clipped at 0.5, one gradi
 | `runs/core`, `runs/beta075` | JSON logs of the 60 main runs (config + every evaluation) |
 | `runs/dose`, `runs/ablation` | JSON logs of the 120 runs of the additional experiments |
 | `figs_extra` | figures, LaTeX tables and statistics of the additional analyses |
+| `mp-sb3/` | Stable-Baselines3 replication: code, per-run CSV/JSON logs, figures |
+| `analyze_sb3.py` | statistics of the Stable-Baselines3 replication |
 | `report/figs` | generated figures, results table and statistics |
 
 ## Reproduce
@@ -112,7 +123,10 @@ python analyze.py runs/core runs/beta075 --out report/figs             # figures
 python analyze_extra.py                                                # additional analyses
 python td3.py --algo td3 --seed 0 --save-ckpt 1 --out runs/showcase    # save new agents, then:
 python watch.py runs/showcase/*.pt                                     # watch them land
+python analyze_sb3.py mp-sb3/results/core                              # statistics of the SB3 replication
 ```
+
+The Stable-Baselines3 replication has its own environment (see [`mp-sb3/README.md`](mp-sb3/README.md)).
 
 With the same seed and library versions, a run is reproduced bit for bit on the same machine;
 on another CPU, floating-point differences make it diverge (an equally valid, not identical, run).

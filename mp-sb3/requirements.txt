@@ -1,0 +1,8 @@
+torch
+gymnasium[box2d]
+stable-baselines3>=2.3,<3
+numpy
+pandas
+tensorboard
+matplotlib
+scipy

@@ -20,3 +20,14 @@ report/figs/old_*
 
 # course practical (not part of this project)
 04_ddpg_td3.ipynb
+
+# SB3 replication: only its code, figures and per-run CSV/JSON logs are published
+mp-sb3.zip
+mp-sb3/.venv/
+mp-sb3/results.zip
+mp-sb3/run_all.log
+mp-sb3/results_smoke/
+mp-sb3/figures_smoke/
+mp-sb3/results_300k/
+mp-sb3/**/eval_raw/
+mp-sb3/**/events.out.tfevents.*

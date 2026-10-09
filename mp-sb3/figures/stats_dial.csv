@@ -1,0 +1,10 @@
+group,x,y,n,spearman_rho,p
+TD3 all,final_bias,final_return_mean,30,0.20177975528364847,0.2849440939398067
+TD3 all,n_critics,final_bias,30,-0.9433332612731563,6.085572779881342e-15
+TD3 all,n_critics,final_return_mean,30,-0.3773333045092625,0.03982011759476649
+TD3 LayerNorm=False,final_bias,final_return_mean,15,0.27499999999999997,0.32121117331937665
+TD3 LayerNorm=False,n_critics,final_bias,15,-0.9449111825230679,1.1286993948503091e-07
+TD3 LayerNorm=False,n_critics,final_return_mean,15,-0.529150262212918,0.04252846628883382
+TD3 LayerNorm=True,final_bias,final_return_mean,15,0.075,0.7905107941552679
+TD3 LayerNorm=True,n_critics,final_bias,15,-0.9449111825230679,1.1286993948503091e-07
+TD3 LayerNorm=True,n_critics,final_return_mean,15,-0.24567690745599763,0.37745510343994887

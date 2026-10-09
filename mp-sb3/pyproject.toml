@@ -1,0 +1,23 @@
+[project]
+name = "mp-sb3"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "gymnasium[box2d]>=1.4.0",
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.3",
+    "pandas>=3.0.6",
+    "scipy>=1.18.1",
+    "stable-baselines3>=2.3,<3",
+    "tensorboard>=2.21.0",
+    "torch>=2.14.1",
+]
+
+[project.scripts]
+mp-sb3 = "mp_sb3:main"
+
+[build-system]
+requires = ["uv_build>=0.12.17,<0.13.0"]
+build-backend = "uv_build"
