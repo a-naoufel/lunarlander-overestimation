@@ -249,7 +249,7 @@ def dagger(ax, x, top, color):
 
 def plot_controlled(summ, sig, out):
     """Report figure: (a) dose-response on beta, (b) ablation; one column per metric, y shared per column."""
-    fig, axes = plt.subplots(2, 3, figsize=(PAGE_W, 3.5), sharey="col", squeeze=False)
+    fig, axes = plt.subplots(2, 3, figsize=(PAGE_W, 3.35), sharey="col", squeeze=False)
     names = (DDPG, *ABLATIONS, TD3)
     for j, (k, metric, scale) in enumerate(METRICS):
         ax = axes[0, j]
